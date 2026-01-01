@@ -1,0 +1,44 @@
+/* Layout Styles */
+
+.layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.layout-body {
+    display: flex;
+    flex: 1;
+    padding-top: 70px;
+    /* New Navbar height */
+}
+
+.main-content {
+    flex: 1;
+    padding: 2rem;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: transparent;
+    /* Let body gradient show through */
+    min-height: calc(100vh - 70px);
+}
+
+.main-content.sidebar-open {
+    margin-left: 280px;
+    /* New Sidebar width */
+}
+
+.main-content.sidebar-closed {
+    margin-left: 0;
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 1rem;
+    }
+
+    .main-content.sidebar-open,
+    .main-content.sidebar-closed {
+        margin-left: 0;
+        /* On mobile, sidebar overlays content */
+    }
+}

@@ -1,0 +1,120 @@
+/* Dashboard Styles */
+
+.dashboard {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.dashboard h1 {
+    margin-bottom: 0.5rem;
+}
+
+.stats-grid {
+    margin-top: 2rem;
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    /* Glass style inherited from .card, but we add a gradient hint */
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--primary);
+    box-shadow: 0 0 10px var(--primary);
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+    opacity: 0.8;
+}
+
+.stat-content h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+    color: var(--text-main);
+}
+
+.stat-content p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.2rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-detail {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Quick Actions */
+.quick-actions {
+    gap: 1.5rem;
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    color: var(--text-secondary);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--primary);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.3);
+    color: var(--text-main);
+}
+
+.action-btn:hover .action-icon {
+    transform: scale(1.1);
+    color: var(--primary);
+}
+
+.action-icon {
+    font-size: 2rem;
+    transition: all 0.3s;
+    color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+    .stat-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem 1rem;
+    }
+
+    .stat-card::before {
+        width: 100%;
+        height: 4px;
+        bottom: auto;
+    }
+
+    .stat-icon {
+        font-size: 2rem;
+    }
+}

@@ -1,0 +1,95 @@
+/* Sidebar Styles */
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 70px;
+    /* Matched to new navbar height */
+    bottom: 0;
+    width: var(--sidebar-width);
+    background: var(--bg-sidebar);
+    /* FIX: Use variable */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-right: var(--border-glass);
+    /* FIX: Use variable */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+    overflow-y: auto;
+    z-index: 999;
+}
+
+.sidebar.closed {
+    transform: translateX(-100%);
+}
+
+.sidebar-nav {
+    padding: 1rem 0;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1.5rem;
+    color: var(--text-secondary);
+    /* FIX: Use variable */
+    text-decoration: none;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.sidebar-link:hover {
+    background: rgba(150, 150, 150, 0.1);
+    /* Visible on both themes */
+    color: var(--text-main);
+    padding-left: 1.8rem;
+}
+
+.sidebar-link.active {
+    background: linear-gradient(90deg, rgba(99, 102, 241, 0.1) 0%, transparent 100%);
+    border-left-color: var(--primary);
+    color: var(--primary);
+    /* Use primary color for text */
+    font-weight: 600;
+    box-shadow: 0 4px 15px -5px rgba(99, 102, 241, 0.2);
+}
+
+.sidebar-icon {
+    font-size: 1.2rem;
+    color: var(--icon-color);
+    /* FIX: Use variable */
+    transition: color 0.2s;
+}
+
+.sidebar-link:hover .sidebar-icon,
+.sidebar-link.active .sidebar-icon {
+    color: var(--primary);
+}
+
+/* Scrollbar Styling */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(150, 150, 150, 0.2);
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(150, 150, 150, 0.3);
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        max-width: 280px;
+        top: 70px;
+    }
+}
