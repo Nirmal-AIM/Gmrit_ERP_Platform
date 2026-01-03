@@ -20,14 +20,15 @@ function Sidebar({ isOpen }) {
         { path: '/admin/courses', label: 'Courses', icon: '📚' },
         { path: '/admin/bc-mapping', label: 'B-C Mapping', icon: '🔗' },
         { path: '/admin/faculty', label: 'Faculty', icon: '👥' },
-        { path: '/admin/fc-mapping', label: 'F-C Mapping', icon: '🔗' },
-        { path: '/admin/course-plugins', label: 'Course Plugins', icon: '🔌' },
-        { path: '/admin/qp-generation', label: 'QP Generation', icon: '📝' }
+        { path: '/admin/fc-mapping', label: 'F-C Mapping', icon: '🔗' }
     ];
 
     const facultyMenuItems = [
         { path: '/faculty/dashboard', label: 'Dashboard', icon: '📊' },
         { path: '/faculty/my-courses', label: 'My Courses', icon: '📚' },
+
+        { path: '/faculty/qp-generation', label: 'QP Generation', icon: '📝' },
+        { path: '/faculty/course-plugins', label: 'Course Plugins', icon: '🔌' },
         { path: '/faculty/change-password', label: 'Change Password', icon: '🔒' }
     ];
 

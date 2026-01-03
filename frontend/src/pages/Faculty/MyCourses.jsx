@@ -46,44 +46,71 @@ const MyCourses = () => {
                     </div>
                 </div>
             ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
-                    {courses.map((mapping) => (
-                        <div key={mapping.id} className="card" style={{ cursor: 'pointer', transition: 'transform 0.2s' }}
-                            onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-                            onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '1.5rem' }}>
+                    {courses.map((course) => (
+                        <div key={course.id} className="card" style={{
+                            transition: 'transform 0.2s, box-shadow 0.2s',
+                            cursor: 'pointer'
+                        }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.transform = 'translateY(-5px)';
+                                e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.1)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = 'none';
+                            }}
                         >
                             <div style={{ padding: '1.5rem' }}>
-                                <h3 style={{ marginBottom: '1rem', color: 'var(--primary-color)' }}>
-                                    {mapping.Course?.courseName}
+                                <h3 style={{
+                                    marginBottom: '1rem',
+                                    color: 'var(--primary-color)',
+                                    fontSize: '1.2rem',
+                                    fontWeight: '600'
+                                }}>
+                                    {course.courseName}
                                 </h3>
-                                <div style={{ marginBottom: '0.5rem' }}>
-                                    <strong>Code:</strong> {mapping.Course?.courseCode}
-                                </div>
-                                <div style={{ marginBottom: '0.5rem' }}>
-                                    <strong>Type:</strong> {mapping.courseType}
-                                </div>
-                                <div style={{ marginBottom: '0.5rem' }}>
-                                    <strong>Year/Sem:</strong> {mapping.year} Year - {mapping.semester} Semester
-                                </div>
-                                <div style={{ marginBottom: '0.5rem' }}>
-                                    <strong>Academic Year:</strong> {mapping.academicYear}
-                                </div>
-                                <div style={{ marginBottom: '1rem' }}>
-                                    <strong>Elective:</strong> {mapping.electiveType}
+
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <span style={{ fontWeight: '600', color: '#555' }}>Course Code:</span>
+                                        <span style={{ color: '#333', fontWeight: '500' }}>{course.courseCode}</span>
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <span style={{ fontWeight: '600', color: '#555' }}>Course Type:</span>
+                                        <span className="badge badge-info">{course.courseType}</span>
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <span style={{ fontWeight: '600', color: '#555' }}>Branch:</span>
+                                        <span style={{ color: '#333', fontWeight: '500' }}>{course.branch} ({course.branchCode})</span>
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <span style={{ fontWeight: '600', color: '#555' }}>Elective Type:</span>
+                                        <span className="badge badge-success">{course.electiveType}</span>
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <span style={{ fontWeight: '600', color: '#555' }}>Year / Sem:</span>
+                                        <span style={{ color: '#333', fontWeight: '500' }}>{course.yearSem}</span>
+                                    </div>
                                 </div>
 
-                                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+                                <div style={{
+                                    borderTop: '1px solid #e0e0e0',
+                                    paddingTop: '1rem',
+                                    display: 'flex',
+                                    gap: '0.75rem'
+                                }}>
                                     <button
                                         className="btn btn-primary"
-                                        style={{ flex: 1, fontSize: '0.9rem' }}
-                                        onClick={() => navigate(`/faculty/course-outcomes/${mapping.courseId}`)}
+                                        style={{ flex: 1, fontSize: '0.9rem', padding: '0.6rem' }}
+                                        onClick={() => navigate(`/faculty/course-outcomes/${course.courseId}`)}
                                     >
-                                        📝 COs
+                                        📝 Course Outcomes
                                     </button>
                                     <button
                                         className="btn btn-primary"
-                                        style={{ flex: 1, fontSize: '0.9rem' }}
-                                        onClick={() => navigate(`/faculty/questions/${mapping.courseId}`)}
+                                        style={{ flex: 1, fontSize: '0.9rem', padding: '0.6rem' }}
+                                        onClick={() => navigate(`/faculty/questions/${course.courseId}`)}
                                     >
                                         ❓ Questions
                                     </button>

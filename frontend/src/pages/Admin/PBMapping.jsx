@@ -23,7 +23,7 @@ const PBMapping = () => {
     const fetchMappings = async () => {
         try {
             setLoading(true);
-            const response = await api.get('/api/admin/pb-mapping');
+            const response = await api.get('/admin/pb-mapping');
             setMappings(response.data.data);
         } catch (err) {
             setError('Failed to fetch mappings');
@@ -35,7 +35,7 @@ const PBMapping = () => {
 
     const fetchPrograms = async () => {
         try {
-            const response = await api.get('/api/admin/programs?isActive=true');
+            const response = await api.get('/admin/programs?isActive=true');
             setPrograms(response.data.data);
         } catch (err) {
             console.error(err);
@@ -44,7 +44,7 @@ const PBMapping = () => {
 
     const fetchBranches = async () => {
         try {
-            const response = await api.get('/api/admin/branches?isActive=true');
+            const response = await api.get('/admin/branches?isActive=true');
             setBranches(response.data.data);
         } catch (err) {
             console.error(err);
@@ -54,7 +54,7 @@ const PBMapping = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await api.post('/api/admin/pb-mapping', currentMapping);
+            await api.post('/admin/pb-mapping', currentMapping);
             fetchMappings();
             closeModal();
         } catch (err) {
@@ -65,7 +65,7 @@ const PBMapping = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this mapping?')) return;
         try {
-            await api.delete(`/api/admin/pb-mapping/${id}`);
+            await api.delete(`/admin/pb-mapping/${id}`);
             fetchMappings();
         } catch (err) {
             setError(err.response?.data?.message || 'Delete failed');
@@ -74,7 +74,7 @@ const PBMapping = () => {
 
     const handleToggleStatus = async (id) => {
         try {
-            await api.patch(`/api/admin/pb-mapping/${id}/toggle-status`);
+            await api.patch(`/admin/pb-mapping/${id}/status`);
             fetchMappings();
         } catch (err) {
             setError(err.response?.data?.message || 'Status toggle failed');
@@ -129,8 +129,8 @@ const PBMapping = () => {
                                 mappings.map((mapping, index) => (
                                     <tr key={mapping.id}>
                                         <td>{index + 1}</td>
-                                        <td>{mapping.Program?.programName}</td>
-                                        <td>{mapping.Branch?.branchName} ({mapping.Branch?.branchCode})</td>
+                                        <td>{mapping.program?.programName}</td>
+                                        <td>{mapping.branch?.branchName} ({mapping.branch?.branchCode})</td>
                                         <td>
                                             <span className={`badge ${mapping.isActive ? 'badge-success' : 'badge-danger'}`}>
                                                 {mapping.isActive ? 'Active' : 'Inactive'}

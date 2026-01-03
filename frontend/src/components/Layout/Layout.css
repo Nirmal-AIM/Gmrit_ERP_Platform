@@ -9,8 +9,7 @@
 .layout-body {
     display: flex;
     flex: 1;
-    padding-top: 70px;
-    /* New Navbar height */
+    padding-top: 90px;
 }
 
 .main-content {

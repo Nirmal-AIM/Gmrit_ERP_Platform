@@ -10,23 +10,39 @@ const { CourseOutcome, Faculty } = require('../../models');
 // Get COs for a course
 router.get('/:courseId', isAuthenticated, isFaculty, async (req, res) => {
     try {
+        const { Course } = require('../../models');
+
+        const course = await Course.findByPk(req.params.courseId);
+        if (!course) return res.status(404).json({ success: false, message: 'Course not found' });
+
         const cos = await CourseOutcome.findAll({
             where: { courseId: req.params.courseId },
             order: [['coNumber', 'ASC']]
         });
 
-        res.json({ success: true, data: cos });
+        res.json({
+            success: true,
+            data: {
+                course: {
+                    id: course.id,
+                    courseCode: course.courseCode,
+                    courseName: course.courseName
+                },
+                outcomes: cos
+            }
+        });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to fetch COs', error: error.message });
     }
 });
 
 // Create CO
-router.post('/', isAuthenticated, isFaculty, async (req, res) => {
+router.post('/:courseId', isAuthenticated, isFaculty, async (req, res) => {
     try {
-        const { courseId, coNumber, coDescription } = req.body;
+        const { coNumber, coDescription } = req.body;
+        const courseId = req.params.courseId;
 
-        if (!courseId || !coNumber || !coDescription) {
+        if (!coNumber || !coDescription) {
             return res.status(400).json({ success: false, message: 'All fields are required' });
         }
 

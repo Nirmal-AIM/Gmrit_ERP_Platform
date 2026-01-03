@@ -103,7 +103,13 @@ app.use('/api/faculty/dashboard', require('./routes/faculty/dashboard'));
 app.use('/api/faculty/my-courses', require('./routes/faculty/myCourses'));
 app.use('/api/faculty/course-outcomes', require('./routes/faculty/courseOutcomes'));
 app.use('/api/faculty/questions', require('./routes/faculty/questions'));
+app.use('/api/faculty/ai-questions', require('./routes/faculty/aiQuestions'));
+app.use('/api/faculty/qp-generation', require('./routes/faculty/qpGeneration'));
+app.use('/api/faculty/course-plugins', require('./routes/faculty/coursePlugins'));
 app.use('/api/faculty/change-password', require('./routes/faculty/changePassword'));
+
+// Common routes
+app.use('/api/chat', require('./routes/common/chat'));
 
 // ============================================
 // ERROR HANDLING MIDDLEWARE

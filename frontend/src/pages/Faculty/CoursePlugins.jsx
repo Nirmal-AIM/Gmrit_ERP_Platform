@@ -22,9 +22,9 @@ const CoursePlugins = () => {
         try {
             setLoading(true);
             const [bloomsRes, diffRes, unitsRes] = await Promise.all([
-                api.get('/admin/course-plugins/blooms-level'),
-                api.get('/admin/course-plugins/difficulty-level'),
-                api.get('/admin/course-plugins/units')
+                api.get('/faculty/course-plugins/blooms-level'),
+                api.get('/faculty/course-plugins/difficulty-level'),
+                api.get('/faculty/course-plugins/units')
             ]);
             setBloomsLevels(bloomsRes.data.data);
             setDifficultyLevels(diffRes.data.data);
@@ -38,9 +38,9 @@ const CoursePlugins = () => {
     };
 
     const getEndpoint = () => {
-        if (activeTab === 'blooms') return '/admin/course-plugins/blooms-level';
-        if (activeTab === 'difficulty') return '/admin/course-plugins/difficulty-level';
-        return '/admin/course-plugins/units';
+        if (activeTab === 'blooms') return '/faculty/course-plugins/blooms-level';
+        if (activeTab === 'difficulty') return '/faculty/course-plugins/difficulty-level';
+        return '/faculty/course-plugins/units';
     };
 
     const getCurrentData = () => {

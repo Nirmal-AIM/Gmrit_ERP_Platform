@@ -43,7 +43,7 @@ const Courses = () => {
             Object.keys(filters).forEach(key => {
                 if (filters[key]) params.append(key, filters[key]);
             });
-            const response = await api.get(`/api/admin/courses?${params}`);
+            const response = await api.get(`/admin/courses?${params}`);
             setCourses(response.data.data);
         } catch (err) {
             setError('Failed to fetch courses');
@@ -55,7 +55,7 @@ const Courses = () => {
 
     const fetchBranches = async () => {
         try {
-            const response = await api.get('/api/admin/branches?isActive=true');
+            const response = await api.get('/admin/branches?isActive=true');
             setBranches(response.data.data);
         } catch (err) {
             console.error(err);
@@ -64,7 +64,7 @@ const Courses = () => {
 
     const fetchRegulations = async () => {
         try {
-            const response = await api.get('/api/admin/regulations?isActive=true');
+            const response = await api.get('/admin/regulations?isActive=true');
             setRegulations(response.data.data);
         } catch (err) {
             console.error(err);
@@ -75,9 +75,9 @@ const Courses = () => {
         e.preventDefault();
         try {
             if (editMode) {
-                await api.put(`/api/admin/courses/${currentCourse.id}`, currentCourse);
+                await api.put(`/admin/courses/${currentCourse.id}`, currentCourse);
             } else {
-                await api.post('/api/admin/courses', currentCourse);
+                await api.post('/admin/courses', currentCourse);
             }
             fetchCourses();
             closeModal();
@@ -89,7 +89,7 @@ const Courses = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this course?')) return;
         try {
-            await api.delete(`/api/admin/courses/${id}`);
+            await api.delete(`/admin/courses/${id}`);
             fetchCourses();
         } catch (err) {
             setError(err.response?.data?.message || 'Delete failed');
@@ -98,7 +98,7 @@ const Courses = () => {
 
     const handleToggleStatus = async (id) => {
         try {
-            await api.patch(`/api/admin/courses/${id}/toggle-status`);
+            await api.patch(`/admin/courses/${id}/status`);
             fetchCourses();
         } catch (err) {
             setError(err.response?.data?.message || 'Status toggle failed');

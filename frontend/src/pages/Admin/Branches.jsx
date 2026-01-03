@@ -58,7 +58,7 @@ const Branches = () => {
 
     const handleToggleStatus = async (id) => {
         try {
-            await api.patch(`/admin/branches/${id}/toggle-status`);
+            await api.patch(`/admin/branches/${id}/status`);
             fetchBranches();
         } catch (err) {
             setError(err.response?.data?.message || 'Status toggle failed');

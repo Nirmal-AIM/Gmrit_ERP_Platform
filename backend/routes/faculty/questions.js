@@ -30,29 +30,45 @@ const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } }); // 5M
 // Get questions for a course
 router.get('/:courseId', isAuthenticated, isFaculty, async (req, res) => {
     try {
+        const { Course } = require('../../models');
+
+        const course = await Course.findByPk(req.params.courseId);
+        if (!course) return res.status(404).json({ success: false, message: 'Course not found' });
+
         const questions = await Question.findAll({
-            where: { courseId: req.params.courseId, isActive: true },
+            where: { courseId: req.params.courseId },
             include: [
-                { model: CourseOutcome, as: 'courseOutcome', attributes: ['coNumber'] },
+                { model: CourseOutcome, as: 'courseOutcome', attributes: ['coNumber', 'coDescription'] },
                 { model: BloomsLevel, as: 'bloomsLevel', attributes: ['levelName'] },
                 { model: DifficultyLevel, as: 'difficultyLevel', attributes: ['levelName'] },
-                { model: Unit, as: 'unit', attributes: ['unitName'] }
+                { model: Unit, as: 'unit', attributes: ['unitName', 'unitNumber'] }
             ],
             order: [['createdAt', 'DESC']]
         });
 
-        res.json({ success: true, data: questions });
+        res.json({
+            success: true,
+            data: {
+                course: {
+                    id: course.id,
+                    courseCode: course.courseCode,
+                    courseName: course.courseName
+                },
+                questions
+            }
+        });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to fetch questions', error: error.message });
     }
 });
 
 // Create question
-router.post('/', isAuthenticated, isFaculty, upload.single('image'), async (req, res) => {
+router.post('/:courseId', isAuthenticated, isFaculty, upload.single('image'), async (req, res) => {
     try {
-        const { courseId, coId, bloomsLevelId, difficultyLevelId, unitId, questionText, marks } = req.body;
+        const courseId = req.params.courseId;
+        const { coId, bloomsLevelId, difficultyLevelId, unitId, questionText, marks } = req.body;
 
-        if (!courseId || !coId || !bloomsLevelId || !difficultyLevelId || !unitId || !questionText || !marks) {
+        if (!coId || !bloomsLevelId || !difficultyLevelId || !unitId || !questionText || !marks) {
             return res.status(400).json({ success: false, message: 'All fields are required' });
         }
 
@@ -84,8 +100,10 @@ router.post('/', isAuthenticated, isFaculty, upload.single('image'), async (req,
 });
 
 // Bulk upload questions
-router.post('/bulk-upload', isAuthenticated, isFaculty, upload.single('file'), async (req, res) => {
+router.post('/:courseId/bulk-upload', isAuthenticated, isFaculty, upload.single('file'), async (req, res) => {
     try {
+        const courseId = req.params.courseId;
+
         if (!req.file) {
             return res.status(400).json({ success: false, message: 'No file uploaded' });
         }
@@ -103,7 +121,7 @@ router.post('/bulk-upload', isAuthenticated, isFaculty, upload.single('file'), a
                 for (const row of results) {
                     try {
                         await Question.create({
-                            courseId: parseInt(row.courseId),
+                            courseId: parseInt(courseId),
                             coId: parseInt(row.coId),
                             bloomsLevelId: parseInt(row.bloomsLevelId),
                             difficultyLevelId: parseInt(row.difficultyLevelId),
@@ -121,6 +139,11 @@ router.post('/bulk-upload', isAuthenticated, isFaculty, upload.single('file'), a
                 res.json({
                     success: true,
                     message: `Bulk upload completed. ${results.length - errors.length} questions created.`,
+                    data: {
+                        created: results.length - errors.length,
+                        total: results.length,
+                        failed: errors.length
+                    },
                     errors: errors.length > 0 ? errors : undefined
                 });
             });

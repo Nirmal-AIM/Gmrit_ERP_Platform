@@ -41,7 +41,7 @@ const Faculty = () => {
 
     const fetchBranches = async () => {
         try {
-            const response = await api.get('/admin/branches?isActive=true');
+            const response = await api.get('/admin/branches?active=true');
             setBranches(response.data.data);
         } catch (err) {
             console.error(err);
@@ -101,7 +101,7 @@ const Faculty = () => {
 
     const handleToggleStatus = async (id) => {
         try {
-            await api.patch(`/admin/faculty/${id}/toggle-status`);
+            await api.patch(`/admin/faculty/${id}/status`);
             fetchFaculty();
         } catch (err) {
             setError(err.response?.data?.message || 'Status toggle failed');
@@ -113,7 +113,7 @@ const Faculty = () => {
             setEditMode(true);
             setCurrentFaculty({
                 id: fac.id,
-                email: fac.User?.email || '',
+                email: fac.user?.email || '',
                 branchId: fac.branchId,
                 honorific: fac.honorific,
                 facultyName: fac.facultyName,
@@ -199,8 +199,8 @@ const Faculty = () => {
                                         <td>{index + 1}</td>
                                         <td>{fac.empId}</td>
                                         <td>{fac.honorific} {fac.facultyName}</td>
-                                        <td>{fac.User?.email}</td>
-                                        <td>{fac.Branch?.branchName}</td>
+                                        <td>{fac.user?.email}</td>
+                                        <td>{fac.branch?.branchName}</td>
                                         <td>{fac.phoneNumber || '-'}</td>
                                         <td>
                                             <span className={`badge ${fac.isActive ? 'badge-success' : 'badge-danger'}`}>

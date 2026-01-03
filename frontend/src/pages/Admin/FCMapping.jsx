@@ -27,7 +27,7 @@ const FCMapping = () => {
     const fetchMappings = async () => {
         try {
             setLoading(true);
-            const response = await api.get('/api/admin/fc-mapping');
+            const response = await api.get('/admin/fc-mapping');
             setMappings(response.data.data);
         } catch (err) {
             setError('Failed to fetch mappings');
@@ -39,7 +39,7 @@ const FCMapping = () => {
 
     const fetchFaculty = async () => {
         try {
-            const response = await api.get('/api/admin/faculty?isActive=true');
+            const response = await api.get('/admin/faculty?active=true');
             setFaculty(response.data.data);
         } catch (err) {
             console.error(err);
@@ -48,7 +48,7 @@ const FCMapping = () => {
 
     const fetchCourses = async () => {
         try {
-            const response = await api.get('/api/admin/courses?isActive=true');
+            const response = await api.get('/admin/courses?active=true');
             setCourses(response.data.data);
         } catch (err) {
             console.error(err);
@@ -58,7 +58,7 @@ const FCMapping = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await api.post('/api/admin/fc-mapping', currentMapping);
+            await api.post('/admin/fc-mapping', currentMapping);
             fetchMappings();
             closeModal();
         } catch (err) {
@@ -69,7 +69,7 @@ const FCMapping = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this mapping?')) return;
         try {
-            await api.delete(`/api/admin/fc-mapping/${id}`);
+            await api.delete(`/admin/fc-mapping/${id}`);
             fetchMappings();
         } catch (err) {
             setError(err.response?.data?.message || 'Delete failed');
@@ -78,7 +78,7 @@ const FCMapping = () => {
 
     const handleToggleStatus = async (id) => {
         try {
-            await api.patch(`/api/admin/fc-mapping/${id}/toggle-status`);
+            await api.patch(`/admin/fc-mapping/${id}/status`);
             fetchMappings();
         } catch (err) {
             setError(err.response?.data?.message || 'Status toggle failed');
@@ -143,8 +143,8 @@ const FCMapping = () => {
                                 mappings.map((mapping, index) => (
                                     <tr key={mapping.id}>
                                         <td>{index + 1}</td>
-                                        <td>{mapping.Faculty?.honorific} {mapping.Faculty?.facultyName}</td>
-                                        <td>{mapping.Course?.courseName} ({mapping.Course?.courseCode})</td>
+                                        <td>{mapping.faculty?.honorific} {mapping.faculty?.facultyName}</td>
+                                        <td>{mapping.course?.courseName} ({mapping.course?.courseCode})</td>
                                         <td>{mapping.courseType}</td>
                                         <td>{mapping.year}-{mapping.semester}</td>
                                         <td>{mapping.academicYear}</td>

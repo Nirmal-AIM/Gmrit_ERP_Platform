@@ -26,6 +26,9 @@ import MyCourses from './pages/Faculty/MyCourses';
 import ChangePassword from './pages/Faculty/ChangePassword';
 import CourseOutcomes from './pages/Faculty/CourseOutcomes';
 import Questions from './pages/Faculty/Questions';
+import FacultyQPGeneration from './pages/Faculty/QPGeneration';
+import FacultyCoursePlugins from './pages/Faculty/CoursePlugins';
+import AIQuestionGenerator from './pages/Faculty/AIQuestionGenerator';
 
 // Layout
 import Layout from './components/Layout/Layout';
@@ -153,6 +156,21 @@ function AppRoutes() {
                 <Route path="faculty/questions/:courseId" element={
                     <ProtectedRoute requiredRole="Faculty">
                         <Questions />
+                    </ProtectedRoute>
+                } />
+                <Route path="faculty/ai-questions" element={
+                    <ProtectedRoute requiredRole="Faculty">
+                        <AIQuestionGenerator />
+                    </ProtectedRoute>
+                } />
+                <Route path="faculty/qp-generation" element={
+                    <ProtectedRoute requiredRole="Faculty">
+                        <FacultyQPGeneration />
+                    </ProtectedRoute>
+                } />
+                <Route path="faculty/course-plugins" element={
+                    <ProtectedRoute requiredRole="Faculty">
+                        <FacultyCoursePlugins />
                     </ProtectedRoute>
                 } />
                 <Route path="faculty/change-password" element={

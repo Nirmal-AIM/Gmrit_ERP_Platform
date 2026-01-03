@@ -11,11 +11,31 @@
     text-align: center;
 }
 
+/* Make table cells wrap text properly */
+.data-table td {
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+    max-width: 300px;
+}
+
+/* Limit description column width */
+.data-table td:nth-child(4) {
+    max-width: 400px;
+}
+
+/* Keep short columns compact */
+.data-table td:nth-child(1),
+.data-table td:nth-child(3) {
+    max-width: 100px;
+}
+
 /* Ensure actions column doesn't wrap */
 .actions {
     display: flex;
     gap: 0.5rem;
     white-space: nowrap;
+    max-width: none !important;
 }
 
 /* Responsive adjustments specific to data tables */

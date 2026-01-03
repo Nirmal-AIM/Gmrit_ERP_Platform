@@ -26,7 +26,7 @@ const BCMapping = () => {
     const fetchMappings = async () => {
         try {
             setLoading(true);
-            const response = await api.get('/api/admin/bc-mapping');
+            const response = await api.get('/admin/bc-mapping');
             setMappings(response.data.data);
         } catch (err) {
             setError('Failed to fetch mappings');
@@ -38,7 +38,7 @@ const BCMapping = () => {
 
     const fetchPBMappings = async () => {
         try {
-            const response = await api.get('/api/admin/pb-mapping?isActive=true');
+            const response = await api.get('/admin/pb-mapping?isActive=true');
             setPBMappings(response.data.data);
         } catch (err) {
             console.error(err);
@@ -47,7 +47,7 @@ const BCMapping = () => {
 
     const fetchRegulations = async () => {
         try {
-            const response = await api.get('/api/admin/regulations?isActive=true');
+            const response = await api.get('/admin/regulations?isActive=true');
             setRegulations(response.data.data);
         } catch (err) {
             console.error(err);
@@ -56,7 +56,7 @@ const BCMapping = () => {
 
     const fetchCourses = async () => {
         try {
-            const response = await api.get('/api/admin/courses?isActive=true');
+            const response = await api.get('/admin/courses?isActive=true');
             setCourses(response.data.data);
         } catch (err) {
             console.error(err);
@@ -66,7 +66,7 @@ const BCMapping = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await api.post('/api/admin/bc-mapping', currentMapping);
+            await api.post('/admin/bc-mapping', currentMapping);
             fetchMappings();
             closeModal();
         } catch (err) {
@@ -77,7 +77,7 @@ const BCMapping = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this mapping?')) return;
         try {
-            await api.delete(`/api/admin/bc-mapping/${id}`);
+            await api.delete(`/admin/bc-mapping/${id}`);
             fetchMappings();
         } catch (err) {
             setError(err.response?.data?.message || 'Delete failed');
@@ -86,7 +86,7 @@ const BCMapping = () => {
 
     const handleToggleStatus = async (id) => {
         try {
-            await api.patch(`/api/admin/bc-mapping/${id}/toggle-status`);
+            await api.patch(`/admin/bc-mapping/${id}/status`);
             fetchMappings();
         } catch (err) {
             setError(err.response?.data?.message || 'Status toggle failed');
@@ -143,10 +143,10 @@ const BCMapping = () => {
                                 mappings.map((mapping, index) => (
                                     <tr key={mapping.id}>
                                         <td>{index + 1}</td>
-                                        <td>{mapping.PBMapping?.Program?.programName}</td>
-                                        <td>{mapping.PBMapping?.Branch?.branchName}</td>
-                                        <td>{mapping.Regulation?.regulationName}</td>
-                                        <td>{mapping.Course?.courseName} ({mapping.Course?.courseCode})</td>
+                                        <td>{mapping.pbMapping?.program?.programName}</td>
+                                        <td>{mapping.pbMapping?.branch?.branchName}</td>
+                                        <td>{mapping.regulation?.regulationName}</td>
+                                        <td>{mapping.course?.courseName} ({mapping.course?.courseCode})</td>
                                         <td>
                                             <span className={`badge ${mapping.isActive ? 'badge-success' : 'badge-danger'}`}>
                                                 {mapping.isActive ? 'Active' : 'Inactive'}
@@ -196,7 +196,7 @@ const BCMapping = () => {
                                     <option value="">Select Program-Branch</option>
                                     {pbMappings.map(pb => (
                                         <option key={pb.id} value={pb.id}>
-                                            {pb.Program?.programName} - {pb.Branch?.branchName}
+                                            {pb.program?.programName} - {pb.branch?.branchName}
                                         </option>
                                     ))}
                                 </select>

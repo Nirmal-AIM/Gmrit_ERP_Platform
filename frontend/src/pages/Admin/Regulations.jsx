@@ -21,7 +21,7 @@ const Regulations = () => {
     const fetchRegulations = async () => {
         try {
             setLoading(true);
-            const response = await api.get('/api/admin/regulations');
+            const response = await api.get('/admin/regulations');
             setRegulations(response.data.data);
         } catch (err) {
             setError('Failed to fetch regulations');
@@ -35,9 +35,9 @@ const Regulations = () => {
         e.preventDefault();
         try {
             if (editMode) {
-                await api.put(`/api/admin/regulations/${currentRegulation.id}`, currentRegulation);
+                await api.put(`/admin/regulations/${currentRegulation.id}`, currentRegulation);
             } else {
-                await api.post('/api/admin/regulations', currentRegulation);
+                await api.post('/admin/regulations', currentRegulation);
             }
             fetchRegulations();
             closeModal();
@@ -49,7 +49,7 @@ const Regulations = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this regulation?')) return;
         try {
-            await api.delete(`/api/admin/regulations/${id}`);
+            await api.delete(`/admin/regulations/${id}`);
             fetchRegulations();
         } catch (err) {
             setError(err.response?.data?.message || 'Delete failed');
@@ -58,7 +58,7 @@ const Regulations = () => {
 
     const handleToggleStatus = async (id) => {
         try {
-            await api.patch(`/api/admin/regulations/${id}/toggle-status`);
+            await api.patch(`/admin/regulations/${id}/status`);
             fetchRegulations();
         } catch (err) {
             setError(err.response?.data?.message || 'Status toggle failed');

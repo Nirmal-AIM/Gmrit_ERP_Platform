@@ -37,7 +37,7 @@ const QPGeneration = () => {
 
     const fetchPrograms = async () => {
         try {
-            const response = await api.get('/api/admin/programs?isActive=true');
+            const response = await api.get('/admin/programs?isActive=true');
             setPrograms(response.data.data);
         } catch (err) {
             console.error(err);
@@ -46,7 +46,7 @@ const QPGeneration = () => {
 
     const fetchRegulations = async () => {
         try {
-            const response = await api.get('/api/admin/regulations?isActive=true');
+            const response = await api.get('/admin/regulations?isActive=true');
             setRegulations(response.data.data);
         } catch (err) {
             console.error(err);
@@ -65,7 +65,7 @@ const QPGeneration = () => {
 
     const fetchHistory = async () => {
         try {
-            const response = await api.get('/api/admin/qp-generation/history');
+            const response = await api.get('/admin/qp-generation/history');
             setHistory(response.data.data);
         } catch (err) {
             console.error(err);

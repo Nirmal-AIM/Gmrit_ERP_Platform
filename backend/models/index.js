@@ -193,6 +193,11 @@ const Course = sequelize.define('courses', {
     description: {
         type: DataTypes.TEXT
     },
+    syllabusPath: {
+        type: DataTypes.STRING(500),
+        allowNull: true,
+        comment: 'Path to uploaded syllabus PDF file'
+    },
     isActive: {
         type: DataTypes.BOOLEAN,
         defaultValue: true
@@ -513,7 +518,8 @@ const GeneratedQP = sequelize.define('generated_qp', {
         allowNull: false
     }
 }, {
-    timestamps: true
+    timestamps: true,
+    updatedAt: false // Disable updatedAt only
 });
 
 // ============================================
@@ -575,6 +581,18 @@ Question.belongsTo(DifficultyLevel, { foreignKey: 'difficultyLevelId', as: 'diff
 // Unit - Question (One-to-Many)
 Unit.hasMany(Question, { foreignKey: 'unitId', as: 'questions' });
 Question.belongsTo(Unit, { foreignKey: 'unitId', as: 'unit' });
+
+// BranchCourseMapping - ProgramBranchMapping (Many-to-One)
+ProgramBranchMapping.hasMany(BranchCourseMapping, { foreignKey: 'pbMappingId', as: 'courseMappings' });
+BranchCourseMapping.belongsTo(ProgramBranchMapping, { foreignKey: 'pbMappingId', as: 'pbMapping' });
+
+// BranchCourseMapping - Regulation (Many-to-One)
+Regulation.hasMany(BranchCourseMapping, { foreignKey: 'regulationId', as: 'branchCourseMappings' });
+BranchCourseMapping.belongsTo(Regulation, { foreignKey: 'regulationId', as: 'regulation' });
+
+// BranchCourseMapping - Course (Many-to-One)
+Course.hasMany(BranchCourseMapping, { foreignKey: 'courseId', as: 'branchMappings' });
+BranchCourseMapping.belongsTo(Course, { foreignKey: 'courseId', as: 'course' });
 
 // Faculty - Question (One-to-Many) - createdBy
 Faculty.hasMany(Question, { foreignKey: 'createdBy', as: 'createdQuestions' });

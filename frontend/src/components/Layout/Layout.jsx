@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
-import './Layout.css';
+import Chatbot from '../Common/Chatbot';
 
 function Layout() {
     const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -19,7 +19,7 @@ function Layout() {
     return (
         <div className="layout">
             <Navbar toggleSidebar={toggleSidebar} />
-            <div className="layout-body">
+            <div className="layout-body" style={{ paddingTop: '80px' }}>
                 <Sidebar isOpen={sidebarOpen} />
                 <main className={`main-content ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
                     <div className="container-fluid">
@@ -27,6 +27,7 @@ function Layout() {
                     </div>
                 </main>
             </div>
+            <Chatbot />
         </div>
     );
 }

@@ -21,7 +21,7 @@ const Programs = () => {
     const fetchPrograms = async () => {
         try {
             setLoading(true);
-            const response = await api.get('/api/admin/programs');
+            const response = await api.get('/admin/programs');
             setPrograms(response.data.data);
         } catch (err) {
             setError('Failed to fetch programs');
@@ -35,9 +35,9 @@ const Programs = () => {
         e.preventDefault();
         try {
             if (editMode) {
-                await api.put(`/api/admin/programs/${currentProgram.id}`, currentProgram);
+                await api.put(`/admin/programs/${currentProgram.id}`, currentProgram);
             } else {
-                await api.post('/api/admin/programs', currentProgram);
+                await api.post('/admin/programs', currentProgram);
             }
             fetchPrograms();
             closeModal();
@@ -49,7 +49,7 @@ const Programs = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this program?')) return;
         try {
-            await api.delete(`/api/admin/programs/${id}`);
+            await api.delete(`/admin/programs/${id}`);
             fetchPrograms();
         } catch (err) {
             setError(err.response?.data?.message || 'Delete failed');
@@ -58,7 +58,7 @@ const Programs = () => {
 
     const handleToggleStatus = async (id) => {
         try {
-            await api.patch(`/api/admin/programs/${id}/toggle-status`);
+            await api.patch(`/admin/programs/${id}/status`);
             fetchPrograms();
         } catch (err) {
             setError(err.response?.data?.message || 'Status toggle failed');

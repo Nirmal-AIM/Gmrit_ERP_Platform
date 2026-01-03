@@ -10,7 +10,7 @@ const multer = require('multer');
 const csv = require('csv-parser');
 const fs = require('fs');
 const { isAuthenticated, isAdmin, hashPassword } = require('../../middleware/auth');
-const { Faculty, User, Branch } = require('../../models');
+const { Faculty, User, Branch, sequelize } = require('../../models');
 const { generatePassword } = require('../../utils/passwordGenerator');
 const { sendFacultyCredentials } = require('../../config/email');
 
@@ -58,53 +58,79 @@ router.get('/:id', isAuthenticated, isAdmin, async (req, res) => {
 
 // Create faculty
 router.post('/', isAuthenticated, isAdmin, async (req, res) => {
+    let transaction;
     try {
+        console.log('📝 Faculty creation request received');
+        console.log('Request body:', req.body);
+
         const { email, userType, branchId, honorific, facultyName, empId, phoneNumber } = req.body;
 
         if (!email || !branchId || !facultyName || !empId) {
+            console.log('❌ Validation failed: Missing required fields');
             return res.status(400).json({ success: false, message: 'All required fields must be provided' });
         }
 
+        console.log('✅ Validation passed');
+
         // Check if user already exists
+        console.log('🔍 Checking if email exists:', email);
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
+            console.log('❌ Email already exists');
             return res.status(400).json({ success: false, message: 'Email already exists' });
         }
 
         // Check if empId already exists
+        console.log('🔍 Checking if empId exists:', empId);
         const existingFaculty = await Faculty.findOne({ where: { empId } });
         if (existingFaculty) {
+            console.log('❌ Employee ID already exists');
             return res.status(400).json({ success: false, message: 'Employee ID already exists' });
         }
+
+        console.log('✅ No duplicates found');
 
         // Generate random password
         const plainPassword = generatePassword(12);
         const hashedPassword = await hashPassword(plainPassword);
+        console.log('🔐 Password generated and hashed');
+
+        // Start transaction for actual creation
+        console.log('🔄 Starting database transaction');
+        transaction = await sequelize.transaction();
 
         // Create user
+        console.log('👤 Creating user record');
         const user = await User.create({
             email,
             password: hashedPassword,
             userType: userType || 'Faculty',
             isActive: true
-        });
+        }, { transaction });
+        console.log('✅ User created with ID:', user.id);
 
         // Create faculty
+        console.log('👨‍🏫 Creating faculty record');
         const faculty = await Faculty.create({
             userId: user.id,
-            branchId,
+            branchId: parseInt(branchId),
             honorific: honorific || 'Mr.',
             facultyName,
             empId,
             phoneNumber,
             isActive: true
-        });
+        }, { transaction });
+        console.log('✅ Faculty created with ID:', faculty.id);
 
-        // Send credentials via email
+        await transaction.commit();
+        console.log('✅ Transaction committed');
+
+        // Send credentials via email (after commit)
         try {
             await sendFacultyCredentials(email, plainPassword, facultyName);
+            console.log('📧 Email sent successfully');
         } catch (emailError) {
-            console.error('Email sending failed:', emailError);
+            console.error('⚠️ Email sending failed:', emailError.message);
             // Continue even if email fails
         }
 
@@ -115,6 +141,7 @@ router.post('/', isAuthenticated, isAdmin, async (req, res) => {
             ]
         });
 
+        console.log('✅ Faculty creation completed successfully');
         res.status(201).json({
             success: true,
             message: 'Faculty created successfully. Credentials sent via email.',
@@ -123,7 +150,11 @@ router.post('/', isAuthenticated, isAdmin, async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Create faculty error:', error);
+        if (transaction) {
+            await transaction.rollback();
+            console.log('🔄 Transaction rolled back');
+        }
+        console.error('❌ Create faculty error:', error);
         res.status(500).json({ success: false, message: 'Failed to create faculty', error: error.message });
     }
 });
